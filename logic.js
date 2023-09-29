@@ -5,6 +5,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const addTaskButton = document.getElementById("add-task");
     const taskList = document.getElementById("task-list");
 
+    // Create an array to store tasks
+    const tasks = [];
+
     addTaskButton.addEventListener("click", () => {
         const task = taskInput.value;
         const priority = priorityInput.value;
@@ -31,7 +34,25 @@ document.addEventListener("DOMContentLoaded", () => {
             <button class="mark-done">Mark Done</button>
         `;
 
-        taskList.appendChild(taskItem);
+        // Push the task object to the tasks array
+        tasks.push({
+            task,
+            priority,
+            deadline,
+            element: taskItem,
+        });
+
+        // Sort tasks by priority before appending
+        tasks.sort((a, b) => {
+            const priorityOrder = { top: 1, middle: 2, low: 3 };
+            return priorityOrder[a.priority] - priorityOrder[b.priority];
+        });
+
+        // Clear the task list and append tasks in sorted order
+        taskList.innerHTML = "";
+        tasks.forEach((taskObj) => {
+            taskList.appendChild(taskObj.element);
+        });
 
         taskInput.value = "";
         priorityInput.value = "top";
